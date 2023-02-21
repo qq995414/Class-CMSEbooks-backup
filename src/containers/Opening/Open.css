@@ -1,0 +1,6 @@
+.dataInput::-webkit-calendar-picker-indicator {
+    background-repeat: no-repeat;
+    width: 15px;
+    background-position: 5% 50%; 
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAICAYAAADN5B7xAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACMSURBVHgBjVDBDYMwDLStSvl2hHaCdp0kj3aDphvABrABPJI8MwqMwBp5BUcCKUJI5D62z747yQgM7/0DKiClXNBa+yaiCerwJK31nFL6Vxy3OYFyp5TqMnFx3OQGS9Y51yHir+Q4vWdDs894tGLRwKLPNo7s/C33t6MgxmiEEC9+BHA1UIsQwv2MXwHW4SZPCv1ergAAAABJRU5ErkJggg==");
+}

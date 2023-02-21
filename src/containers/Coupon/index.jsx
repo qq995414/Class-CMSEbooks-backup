@@ -1,0 +1,170 @@
+import {
+  Button,
+  Divider,
+  FormControl,
+  IconButton,
+  Input,
+  InputAdornment,
+  InputBase,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Paper,
+  Select,
+} from "@mui/material";
+import { useState, useEffect } from "react";
+import { fetchCouponList } from "../../api/Coupon";
+
+import Header from "../../components/Header";
+import LeftBar from "../../components/LeftBar";
+import { StyledFlexBox, StyledImage } from "../../styles/Shared.styles";
+import CouponTable from "./CouponTable";
+import CouponDetail from "./CouponDetail";
+import CouponEditorDetail from "./CouponEditorDetail";
+const Coupon = () => {
+  const names = [
+    "Oliver Hansen",
+    "Van Henry",
+    "April Tucker",
+    "Ralph Hubbard",
+    "Omar Alexander",
+    "Carlos Abbott",
+    "Miriam Wagner",
+    "Bradley Wilkerson",
+    "Virginia Andrews",
+    "Kelly Snyder",
+  ];
+  const [personName, setPersonName] = useState([]);
+  const [CouponData, setCouponData] = useState([]);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [detailEditorOpen, setDetailEditorOpen] = useState(false);
+  const [detailId, setDetailId] = useState(null);
+  const [keyWord, setKeyWord] = useState("");
+  const [nowSort, setNowSort] = useState("");
+  const [pageLimit, setPageLimit] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const handleChange = () => { };
+
+  useEffect(() => {
+    fetchCouponList({
+      "page_limit": pageLimit, "page_number": pageNumber, sort: "", query_word: ""
+    }).then(({ data }) => {
+      console.log(data)
+      setCouponData(data)
+    });
+  }, [detailOpen, detailEditorOpen, pageNumber]);
+  return (
+    <>
+      <Header />
+      <LeftBar />
+      <StyledFlexBox
+        top={50}
+        left={180}
+        pt={40}
+        px={50}
+        flexDirection="column"
+        maxWidth="calc(100% - 180px)"
+        maxHeight="calc(100vh - 50px)"
+        overflowX="auto"
+        overflowY="auto"
+      >
+        <StyledFlexBox fontSize={24} fontWeight={700} mb={32} color="#242731">
+          優惠券管理
+        </StyledFlexBox>
+        <StyledFlexBox
+          justifyContent="space-between"
+          alignItems="center"
+          mb={24}
+        >
+          <StyledFlexBox alignItems="center">
+            <Paper
+              component="form"
+              sx={{
+                p: "2px 4px",
+                display: "flex",
+                alignItems: "center",
+                width: 268,
+                height: 40,
+                borderRadius: "100px",
+                boxShadow: 0,
+                fontSize: 14,
+              }}
+            >
+              <InputBase
+                sx={{ ml: 1, flex: 1, fontSize: 14 }}
+                placeholder="搜尋"
+                inputProps={{ "aria-label": "搜尋" }}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <StyledImage src="/images/icon-search.svg" />
+                  </InputAdornment>
+                }
+              />
+            </Paper>
+            <FormControl
+              sx={{
+                width: 120,
+                height: 40,
+                m: 1,
+              }}
+              variant="standard"
+            >
+              <Select
+                displayEmpty
+                value={personName}
+                onChange={handleChange}
+                renderValue={(selected) => {
+                  if (selected.length === 0) {
+                    return <em>選擇排序</em>;
+                  }
+
+                  return selected.join(", ");
+                }}
+                // MenuProps={MenuProps}
+                variant="outlined"
+                inputProps={{ "aria-label": "Without label" }}
+                sx={{
+                  fontSize: 14,
+                  width: 120,
+                  height: 40,
+                  color: "#505050",
+                }}
+              >
+                <MenuItem disabled value="">
+                  <em>選擇排序</em>
+                </MenuItem>
+                {names.map((name) => (
+                  <MenuItem key={name} value={name}>
+                    {name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </StyledFlexBox>
+          <StyledFlexBox>
+            <Button variant="contained" onClick={() => setDetailOpen(true)}>+ 新增優惠券</Button>
+          </StyledFlexBox>
+        </StyledFlexBox>
+        <CouponTable
+          pageLimit={pageLimit}
+          setPageNumber={setPageNumber}
+          pageNumber={pageNumber}
+          tableData={CouponData}
+          setDetailEditorOpen={setDetailEditorOpen}
+          setDetailId={setDetailId} />
+        <CouponDetail
+          open={detailOpen}
+          setDetailOpen={setDetailOpen}
+        />
+        <CouponEditorDetail
+          open={detailEditorOpen}
+          setDetailOpen={setDetailEditorOpen}
+          detailId={detailId}
+        />
+      </StyledFlexBox>
+    </>
+  );
+};
+
+export default Coupon;
